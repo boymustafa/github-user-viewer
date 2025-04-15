@@ -18,9 +18,19 @@ class MainViewModel @Inject constructor(private val api: GitHubService) : ViewMo
 
     fun searchUsers() {
         viewModelScope.launch {
-            try { userList = api.searchUsers(searchQuery).items } catch (e: Exception) { e.printStackTrace() }
+            if (searchQuery.isBlank()) {
+                userList = emptyList()
+                return@launch
+            }
+
+            try {
+                userList = api.searchUsers(searchQuery).items
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
+
 
     fun loadUserDetail(username: String) {
         viewModelScope.launch {

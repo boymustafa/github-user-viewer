@@ -16,6 +16,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import coil.compose.rememberAsyncImagePainter
 
@@ -33,8 +37,24 @@ fun UserSearchScreen(viewModel: MainViewModel, onUserClick: (String) -> Unit) {
                     viewModel.searchUsers()
                 },
                 placeholder = { Text("Search users") },
-                modifier = Modifier.fillMaxWidth().padding(8.dp)
+                trailingIcon = {
+                    if (viewModel.searchQuery.isNotEmpty()) {
+                        Icon(
+                            imageVector = Icons.Default.Close,
+                            contentDescription = "Clear search",
+                            modifier = Modifier
+                                .clickable {
+                                    viewModel.searchQuery = ""
+                                    viewModel.searchUsers()
+                                }
+                        )
+                    }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
             )
+
 
             LazyColumn {
                 items(viewModel.userList) { user ->
